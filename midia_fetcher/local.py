@@ -35,6 +35,7 @@ class DiskSource(DataSource):
             raise FileNotFoundError(f"No dataset found matching: {src_paths}")
         src_path = globbed_paths.pop()
         self._path_fetch(src_path, dst_path)
+        return True
 
 class Cache(DataSource):
 
@@ -74,6 +75,7 @@ class Cache(DataSource):
             if not self.back_source.fetch(
                 instrument_tag, dataset, path_in_cache, overwrite=True
             ):
+                print("Cache: Couldn't fetch remote dataset, giving up")
                 return False
             finished_tag.touch()
         print("Copying from cache")
