@@ -8,14 +8,14 @@ class SshSource(DataSource):
         self.remote = remote_host
         self.pattern = path_pattern
 
-    def fetch(self, instrument_tag, dataset, dst_path, overwrite=False):
+    def fetch(self, instrument, dataset, dst_path, overwrite=False):
         self.prepare_dst(dst_path, overwrite=overwrite)
 
-        for path in self.pattern.get_paths(instrument_tag, dataset):
+        for path in self.pattern.get_paths(instrument, dataset):
             remote_path = self.remote + ":" + path
             command = ["scp", "-r", remote_path, dst_path]
 
-            print(f"Attempting fetch of {instrument_tag}{dataset} from {remote_path}")
+            print(f"Attempting fetch of {instrument}{dataset} from {remote_path}")
             ret = subprocess.run(command)
             if ret.returncode == 0:
 

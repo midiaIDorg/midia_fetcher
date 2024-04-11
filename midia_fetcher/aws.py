@@ -10,7 +10,7 @@ class AwsSource(DataSource):
         bucket_name="mainz-shared-bucket",
         region_name=None,
         aws_access_key_id=None,
-        aws_secret_access_key=None,
+        aws_secret_access_key=None
     ):
         self.session = boto3.session.Session(region_name=region_name,
                                              aws_access_key_id=aws_access_key_id,
@@ -19,6 +19,7 @@ class AwsSource(DataSource):
         self.bucket = self.s3.Bucket(bucket_name)
 
     def fetch(self, instrument, dataset, dst_path, overwrite=False):
+        print(f"Attempting fetch of {instrument}{dataset} from AWS S3 bucket {self.bucket.name}")
         self.prepare_dst(destination=dst_path, overwrite=overwrite)
         dst_path = Path(dst_path)
         paths = set()

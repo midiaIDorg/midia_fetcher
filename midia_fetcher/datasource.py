@@ -28,6 +28,9 @@ class Chain(DataSource):
         self.sources = sources
     def fetch(self, instrument, dataset, dst_path,overwrite=False):
         for source in self.sources:
-            if source.fetch(instrument=instrument, dataset=dataset, dst_path=dst_path, overwrite=overwrite):
-                return True
+            try:
+                if source.fetch(instrument=instrument, dataset=dataset, dst_path=dst_path, overwrite=overwrite):
+                    return True
+            except Exception as e:
+                print(str(e))
         return False

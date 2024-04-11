@@ -22,9 +22,9 @@ class DiskSource(DataSource):
         print("Running: " + " ".join(command))
         subprocess.run(command, check=True)
 
-    def fetch(self, instrument_tag, dataset, dst_path, overwrite=False):
+    def fetch(self, instrument, dataset, dst_path, overwrite=False):
         self.prepare_dst(dst_path, overwrite=overwrite)
-        src_paths = self.pattern.get_paths(instrument_tag, dataset)
+        src_paths = self.pattern.get_paths(instrument, dataset)
         globbed_paths = set()
         for path in src_paths:
             globbed_paths.update(glob(str(path)))
@@ -62,24 +62,24 @@ class Cache(DataSource):
         except KeyError:
             return None
 
-    def _cache_path(self, instrument_tag, dataset):
-        paths = self.path_pattern.get_paths(instrument_tag, dataset)
+    def _cache_path(self, instrument, dataset):
+        paths = self.path_pattern.get_paths(instrument, dataset)
         assert len(paths) == 1
         return paths[0]
 
-    def fetch(self, instrument_tag, dataset, path, overwrite=False):
-        path_in_cache = self._cache_path(instrument_tag, dataset)
+    def fetch(self, instrument, dataset, path, overwrite=False):
+        path_in_cache = self._cache_path(instrument, dataset)
         finished_tag = path_in_cache.with_suffix(".finished")
         if not finished_tag.exists():
             print(f"Finished-tag {finished_tag} not present in cache, fetching from remote into cache")
             if not self.back_source.fetch(
-                instrument_tag, dataset, path_in_cache, overwrite=True
+                instrument, dataset, path_in_cache, overwrite=True
             ):
                 print("Cache: Couldn't fetch remote dataset, giving up")
                 return False
             finished_tag.touch()
         print("Copying from cache")
         return self.disk_source.fetch(
-            instrument_tag, dataset, path, overwrite=overwrite
+            instrument, dataset, path, overwrite=overwrite
         )
 
