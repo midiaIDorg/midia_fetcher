@@ -23,12 +23,16 @@ class DiskSource(DataSource):
 
     def fetch(self, instrument_tag, dataset, dst_path, overwrite=False):
         self.prepare_dst(dst_path, overwrite=overwrite)
-        src_path = self.pattern.get_paths(instrument_tag, dataset)
-        if len(src_path) > 1:
-            raise RuntimeError(f"More than one directory matching storage pattern present. Those are: \n{src_path}")
-        if len(src_path) == 0:
-            raise FileNotFoundError(f"No dataset found matching: {src_path}")
-        src_path = src_path[0]
+        src_paths = self.pattern.get_paths(instrument_tag, dataset)
+        globbed_paths = set()
+        for path in src_paths:
+            globbed_paths.update(glob(path))
+
+        if len(globbed_path) > 1:
+            raise RuntimeError(f"More than one directory matching storage pattern present. Those are: \n{globbed_path}")
+        if len(globbed_path) == 0:
+            raise FileNotFoundError(f"No dataset found matching: {src_paths}")
+        src_path = globbed_paths[0]
         self._path_fetch(src_path, dst_path)
 
 class Cache(DataSource):
