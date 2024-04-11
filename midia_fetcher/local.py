@@ -33,7 +33,7 @@ class DiskSource(DataSource):
             raise RuntimeError(f"More than one directory matching storage pattern present. Those are: \n{globbed_paths}")
         if len(globbed_paths) == 0:
             raise FileNotFoundError(f"No dataset found matching: {src_paths}")
-        src_path = globbed_paths[0]
+        src_path = globbed_paths.pop()
         self._path_fetch(src_path, dst_path)
 
 class Cache(DataSource):
