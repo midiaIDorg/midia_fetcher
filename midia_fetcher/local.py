@@ -24,7 +24,10 @@ class DiskSource(DataSource):
     def fetch(self, instrument_tag, dataset, dst_path, overwrite=False):
         self.prepare_dst(dst_path, overwrite=overwrite)
         src_path = self.pattern.get_paths(instrument_tag, dataset)
-        assert len(src_path) == 1
+        if len(src_path) > 1:
+            raise RuntimeError(f"More than one directory matching storage pattern present. Those are: \n{src_path}")
+        if len(src_path) == 0:
+            raise FileNotFoundError(f"No dataset found matching: {src_path}")
         src_path = src_path[0]
         self._path_fetch(src_path, dst_path)
 
