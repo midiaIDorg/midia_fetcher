@@ -31,7 +31,7 @@ setup(
     keywords="DIA TimsTOF",
     packages=find_packages(),
     python_requires=">=3.9",
-    install_requires="toml".split(),
+    install_requires="toml boto3".split(),
     scripts=glob.glob("tools/midia_fetch.py"),
     package_dir={"midia_tester": "midia_tester"},
     package_data={"midia_tester": ["configs/default.toml"]},

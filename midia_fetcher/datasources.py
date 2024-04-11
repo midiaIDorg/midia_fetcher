@@ -5,25 +5,6 @@ import subprocess
 import shutil
 
 
-class DataSource(ABC):
-    #    def push(self):
-    #        raise NotImplemented()
-    def fetch(self, instrument, dataset, dst_path):
-        raise NotImplemented()
-
-    def push_path(self):
-        raise NotImplemented()
-
-    def prepare_dst(self, destination, overwrite):
-        destination = Path(destination)
-        assert destination.parent.exists()
-        if overwrite:
-            shutil.rmtree(destination, ignore_errors=True)
-        else:
-            assert not destination.exists()
-
-
-
 class MainzNetDisk(DiskSource):
     def __init__(self):
         # Composition over inheritance

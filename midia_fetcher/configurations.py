@@ -10,6 +10,9 @@ def get_configuration(name = None):
     if name == 'solace':
         remote = SshSource("tuntiger", MainzPaths())
         return Cache(remote, "/mnt/storage/science/midia_rawdata")
+    elif name == 'spot':
+        remote = SshSource("tuntiger", MainzPaths())
+        return remote
     elif name == 'tiger':
         remote = DiskSource(MainzPaths())
         return Cache(remote, "/mnt/btrfs/midia_cached_data")
