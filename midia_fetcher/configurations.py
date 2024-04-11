@@ -12,5 +12,5 @@ def get_configuration(name = None):
         return Cache(remote, "/mnt/storage/science/midia_rawdata")
     elif name == 'tiger':
         remote = DiskSource(MainzPaths())
-        return Cache(remote, "/home/midia_cached_data")
+        return Cache(remote, "/mnt/btrfs/midia_cached_data")
     raise NotImplementedError()
