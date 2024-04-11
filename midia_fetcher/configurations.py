@@ -6,19 +6,20 @@ from midia_fetcher.aws import AwsSource
 from midia_fetcher.local import Cache, DiskSource
 from midia_fetcher.datasource import Chain
 
-def get_configuration(name = None):
+
+def get_configuration(name=None):
     if name is None:
         name = socket.gethostname()
 
-    if name == 'solace':
+    if name == "solace":
         ssh = SshSource("tuntiger", MainzPaths())
         aws = AwsSource()
         remote = Chain([ssh, aws])
         return Cache(remote, "/mnt/storage/science/midia_rawdata")
-    elif name == 'spot':
+    elif name == "spot":
         remote = SshSource("tuntiger", MainzPaths())
         return remote
-    elif name == 'tiger':
+    elif name == "tiger":
         remote = DiskSource(MainzPaths())
         return Cache(remote, "/mnt/btrfs/midia_cached_data")
     raise NotImplementedError()

@@ -31,4 +31,9 @@ args = parser.parse_args()
 from midia_fetcher.configurations import get_configuration
 
 fetcher = get_configuration(args.config)
-fetcher.fetch(instrument=args.instrument_tag, dataset=args.dataset, path=args.output, overwrite=args.force)
+fetcher.fetch(
+    instrument=args.instrument_tag,
+    dataset=args.dataset,
+    path=args.output,
+    overwrite=args.force,
+)

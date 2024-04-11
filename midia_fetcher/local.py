@@ -30,12 +30,15 @@ class DiskSource(DataSource):
             globbed_paths.update(glob(str(path)))
 
         if len(globbed_paths) > 1:
-            raise RuntimeError(f"More than one directory matching storage pattern present. Those are: \n{globbed_paths}")
+            raise RuntimeError(
+                f"More than one directory matching storage pattern present. Those are: \n{globbed_paths}"
+            )
         if len(globbed_paths) == 0:
             raise FileNotFoundError(f"No dataset found matching: {src_paths}")
         src_path = globbed_paths.pop()
         self._path_fetch(src_path, dst_path)
         return True
+
 
 class Cache(DataSource):
 
@@ -71,7 +74,9 @@ class Cache(DataSource):
         path_in_cache = self._cache_path(instrument, dataset)
         finished_tag = path_in_cache.with_suffix(".finished")
         if not finished_tag.exists():
-            print(f"Finished-tag {finished_tag} not present in cache, fetching from remote into cache")
+            print(
+                f"Finished-tag {finished_tag} not present in cache, fetching from remote into cache"
+            )
             if not self.back_source.fetch(
                 instrument, dataset, path_in_cache, overwrite=True
             ):
@@ -79,7 +84,4 @@ class Cache(DataSource):
                 return False
             finished_tag.touch()
         print("Copying from cache")
-        return self.disk_source.fetch(
-            instrument, dataset, path, overwrite=overwrite
-        )
-
+        return self.disk_source.fetch(instrument, dataset, path, overwrite=overwrite)
