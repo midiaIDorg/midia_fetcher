@@ -1,6 +1,7 @@
-from datasource import DataSource
+from midia_fetcher.datasource import DataSource
 
 import subprocess
+
 
 class SshSource(DataSource):
     def __init__(self, remote_host, path_pattern):
@@ -22,4 +23,3 @@ class SshSource(DataSource):
                 return True
             print(f"Failed, returncode: {ret.returncode}")
         return False
-
