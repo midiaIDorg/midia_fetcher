@@ -1,5 +1,6 @@
 import subprocess
 from pathlib import Path
+from glob import glob
 
 from midia_fetcher.datasource import DataSource
 from midia_fetcher.paths import PlainPath
@@ -26,7 +27,7 @@ class DiskSource(DataSource):
         src_paths = self.pattern.get_paths(instrument_tag, dataset)
         globbed_paths = set()
         for path in src_paths:
-            globbed_paths.update(path.glob())
+            globbed_paths.update(glob(str(path)))
 
         if len(globbed_paths) > 1:
             raise RuntimeError(f"More than one directory matching storage pattern present. Those are: \n{globbed_paths}")
