@@ -22,4 +22,9 @@ def get_configuration(name=None):
     elif name == "tiger":
         remote = DiskSource(MainzPaths())
         return Cache(remote, "/mnt/btrfs/midia_cached_data")
+    elif name == "pingu":
+        ssh = SshSource("midia", MainzPaths())
+        aws = AwsSource()
+        remote = Chain([ssh, aws])
+        return Cache(remote, "/home/matteo/msdata")
     raise NotImplementedError()
