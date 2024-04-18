@@ -1,5 +1,6 @@
 import socket
 
+from pathlib import Path
 from midia_fetcher.paths import MainzPaths
 from midia_fetcher.ssh import SshSource
 from midia_fetcher.aws import AwsSource
@@ -22,7 +23,7 @@ def get_configuration(name=None):
     elif name == "tiger":
         remote = DiskSource(MainzPaths())
         return Cache(remote, "/mnt/btrfs/midia_cached_data")
-    elif name == "midia":
+    elif name == "midiaor":
         remote = DiskSource(MainzPaths())
         return Cache(remote, "/home/_common_/midia_cached_data")
     elif name == "pingu":
@@ -30,4 +31,9 @@ def get_configuration(name=None):
         aws = AwsSource()
         remote = Chain([ssh, aws])
         return Cache(remote, "/home/matteo/msdata")
+    else:
+        aws = AwsSource()
+        cache_folder = Path.home() / "msdata"
+        cache_folder.mkdir(parents=False, exist_ok=True)
+        return Cache(aws, str(cache_folder))
     raise NotImplementedError()
