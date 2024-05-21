@@ -12,6 +12,7 @@ class AwsSource(DataSource):
         region_name=None,
         aws_access_key_id=None,
         aws_secret_access_key=None,
+        prefixes=None,
     ):
         self.session = boto3.session.Session(
             region_name=region_name,
@@ -20,6 +21,15 @@ class AwsSource(DataSource):
         )
         self.s3 = self.session.resource("s3")
         self.bucket = self.s3.Bucket(bucket_name)
+        self.prefixes = prefixes
+
+    def matches_prefixes(self, path):
+        if self.prefixes is None:
+            return True
+        for prefix in self.prefixes:
+            if path.startswith(prefix):
+                return True
+        return False
 
     def fetch(self, instrument, dataset, dst_path, overwrite=False):
         print(
@@ -33,6 +43,9 @@ class AwsSource(DataSource):
             for obj in self.bucket.objects.all():
                 key = obj.key
                 path_n, file_n = key.rsplit("/", 1)
+                if not self.matches_prefixes(path_n):
+                    continue
+                print(key, self.matches_prefixes(key))
                 if file_n == "analysis.tdf":
                     _, dir_n = path_n.rsplit("/", 1)
                     if dir_n.startswith(instrument) and dir_n.endswith(expected_suffix):
@@ -65,5 +78,5 @@ class AwsSource(DataSource):
 
 if __name__ == "__main__":
 
-    A = AwsSource()
+    A = AwsSource(prefixes = ["data/reference_datasets/Phosphoproteome set", "data/reference_data/shortgradient_highload"])
     A.fetch("G", 1234, "gtest", overwrite=True)

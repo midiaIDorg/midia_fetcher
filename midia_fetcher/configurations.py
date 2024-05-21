@@ -7,6 +7,8 @@ from midia_fetcher.aws import AwsSource
 from midia_fetcher.local import Cache, DiskSource
 from midia_fetcher.datasource import Chain
 
+def default_aws_source():
+    return AwsSource(prefixes = ["data/reference_datasets/Phosphoproteome set", "data/reference_data/shortgradient_highload"])
 
 def get_configuration(name=None):
     if name is None:
@@ -14,7 +16,7 @@ def get_configuration(name=None):
 
     if name == "solace":
         ssh = SshSource("tuntiger", MainzPaths())
-        aws = AwsSource()
+        aws = default_aws_source()
         remote = Chain([ssh, aws])
         return Cache(remote, "/mnt/storage/science/midia_rawdata")
     elif name == "spot":
@@ -31,11 +33,11 @@ def get_configuration(name=None):
         return Cache(remote, "/home/_common_/midia_cached_data")
     elif name == "pingu":
         ssh = SshSource("midia", MainzPaths())
-        aws = AwsSource()
+        aws = default_aws_source()
         remote = Chain([ssh, aws])
         return Cache(remote, "/home/matteo/msdata")
     else:
-        aws = AwsSource()
+        aws = default_aws_source()
         cache_folder = Path.home() / "msdata"
         cache_folder.mkdir(parents=False, exist_ok=True)
         return Cache(aws, str(cache_folder))
