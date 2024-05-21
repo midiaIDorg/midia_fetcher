@@ -15,7 +15,7 @@ class SshSource(DataSource):
             remote_path = self.remote + ":" + path
             command = ["scp", "-r", remote_path, dst_path]
 
-            print(f"Attempting fetch of {instrument}{dataset} from {remote_path}")
+            print(f"Attempting SSH (remote host: {remote_path}) fetch of {instrument}{dataset} from {remote_path}")
             ret = subprocess.run(command)
             if ret.returncode == 0:
 
