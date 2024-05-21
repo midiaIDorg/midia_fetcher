@@ -37,7 +37,7 @@ class AwsSource(DataSource):
 
     def fetch(self, instrument, dataset, dst_path, overwrite=False):
         print(
-            f"Attempting fetch of {instrument}{dataset} from AWS S3 bucket {self.bucket.name}"
+            f"Searching for {instrument}{dataset} in AWS S3 bucket {self.bucket.name}..."
         )
         self.prepare_dst(destination=dst_path, overwrite=overwrite)
         dst_path = Path(dst_path)
@@ -63,6 +63,8 @@ class AwsSource(DataSource):
                 )
 
             path = paths.pop()
+
+            print("Found in AWS, fetching...")
 
             for obj in self.bucket.objects.all():
                 key = obj.key

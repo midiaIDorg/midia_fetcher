@@ -8,7 +8,7 @@ from midia_fetcher.local import Cache, DiskSource
 from midia_fetcher.datasource import Chain
 
 def default_aws_source():
-    return AwsSource(prefixes = ["data/reference_datasets/Phosphoproteome set", "data/reference_data/shortgradient_highload"])
+    return AwsSource(prefixes = ["data/reference_datasets", "data/reference_data"])
 
 def get_configuration(name=None):
     if name is None:
