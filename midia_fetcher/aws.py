@@ -31,6 +31,10 @@ class AwsSource(DataSource):
                 return True
         return False
 
+    def ls(self):
+        for obj in self.bucket.objects.all():
+            print(obj.key)
+
     def fetch(self, instrument, dataset, dst_path, overwrite=False):
         print(
             f"Attempting fetch of {instrument}{dataset} from AWS S3 bucket {self.bucket.name}"
@@ -45,7 +49,6 @@ class AwsSource(DataSource):
                 path_n, file_n = key.rsplit("/", 1)
                 if not self.matches_prefixes(path_n):
                     continue
-                print(key, self.matches_prefixes(key))
                 if file_n == "analysis.tdf":
                     _, dir_n = path_n.rsplit("/", 1)
                     if dir_n.startswith(instrument) and dir_n.endswith(expected_suffix):
@@ -79,4 +82,5 @@ class AwsSource(DataSource):
 if __name__ == "__main__":
 
     A = AwsSource(prefixes = ["data/reference_datasets/Phosphoproteome set", "data/reference_data/shortgradient_highload"])
-    A.fetch("G", 1234, "gtest", overwrite=True)
+    A.ls()
+    #A.fetch("G", 1234, "gtest", overwrite=True)
