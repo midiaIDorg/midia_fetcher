@@ -42,6 +42,15 @@ class MainzPaths(PathPattern):
         glob_patterns.append(
             f"/mnt/ms/old/rawdata/{instrument_name}/RAW_ttp/{instrument_tag}*_{dataset}.d"
         )
+        if instrument_tag == "B":
+            glob_patterns.extend(
+                [
+                    f"/mnt/ms/new/processed/midia_datasets_benchmark/2024_benchmarksets_BremenSK_rawdata/longgradient_highload/{instrument_tag}*_{dataset}.d",
+                    f"/mnt/ms/new/processed/midia_datasets_benchmark/2024_benchmarksets_BremenSK_rawdata/shortgradient_highload/{instrument_tag}*_{dataset}.d",
+                    f"/mnt/ms/new/processed/midia_datasets_benchmark/2024_benchmarksets_BremenSK_rawdata/Yeast/Yeast15min/{instrument_tag}*_{dataset}.d",
+                ]
+            )
+
         print(glob_patterns)
         return glob_patterns
         """
