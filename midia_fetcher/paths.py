@@ -16,7 +16,7 @@ class PlainPath(PathPattern):
         self.base_dir = Path(base_dir)
 
     def get_paths(self, instrument_tag, dataset):
-        return [self.base_dir / f"{instrument_tag}_{dataset}.d"]
+        return [self.base_dir / f"{instrument_tag}*_{dataset}.d"]
 
 
 class MainzPaths(PathPattern):
@@ -53,21 +53,3 @@ class MainzPaths(PathPattern):
 
         print(glob_patterns)
         return glob_patterns
-        """
-        paths = set()
-        for pattern in glob_patterns:
-            paths.update(glob(pattern))
-        """
-
-        if len(paths) == 0:
-            raise FileNotFoundError(
-                f"Can't find any file corresponding to: {instrument_tag}{dataset}"
-            )
-
-        if len(paths) > 1:
-            raise RuntimeError(
-                f"Too many files matching {instrument_tag}{dataset}:\n"
-                + "\n".join(paths)
-            )
-
-        return Path(paths.pop())

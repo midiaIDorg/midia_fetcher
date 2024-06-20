@@ -39,6 +39,10 @@ def get_configuration(name=None):
         aws = default_aws_source()
         remote = Chain([ssh, aws])
         return Cache(remote, "/home/matteo/msdata")
+    elif name == "ubuntu":
+        aws = Cache(default_aws_source(), "~/aws_cache")
+        local = DiskSource(PlainPaths("~/data"))
+        return Chain([local, aws])
     else:
         aws = default_aws_source()
         cache_folder = Path.home() / "msdata"
