@@ -26,7 +26,9 @@ def get_configuration(name=None):
         remote = SshSource("tuntiger", MainzPaths())
         return Cache(remote, "/mnt/storage/midia/rawdata")
     elif name == "wloczykij":
-        remote = SshSource("tuntiger", MainzPaths())
+        ssh = SshSource("tuntiger", MainzPaths())
+        aws = default_aws_source()
+        remote = Chain([ssh, aws])
         return Cache(remote, "/home/midia_rawdata")
     elif name == "tiger":
         remote = DiskSource(MainzPaths())
