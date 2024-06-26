@@ -41,13 +41,15 @@ def get_configuration(name=None):
         aws = default_aws_source()
         remote = Chain([ssh, aws])
         return Cache(remote, "/home/matteo/msdata")
-    elif name == "ubuntu":
+    else:
         aws = Cache(default_aws_source(), "~/aws_cache")
-        local = DiskSource(PlainPaths("~/data"))
+        local = DiskSource("~/data")
         return Chain([local, aws])
+    '''
     else:
         aws = default_aws_source()
         cache_folder = Path.home() / "msdata"
         cache_folder.mkdir(parents=False, exist_ok=True)
         return Cache(aws, str(cache_folder))
     raise NotImplementedError()
+    '''

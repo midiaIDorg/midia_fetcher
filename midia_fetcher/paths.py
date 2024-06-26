@@ -16,8 +16,15 @@ class PlainPath(PathPattern):
         self.base_dir = Path(base_dir)
 
     def get_paths(self, instrument_tag, dataset):
-        return [self.base_dir / f"{instrument_tag}*_{dataset}.d"]
+        return [self.base_dir / f"{instrument_tag}_{dataset}.d"]
 
+class GlobPath(PathPattern):
+    def __init__(self, base_dir):
+        super().__init__()
+        self.base_dir = Path(base_dir)
+
+    def get_paths(self, instrument_tag, dataset):
+        return [self.base_dir / f"{instrument_tag}*_{dataset}.d"]
 
 class MainzPaths(PathPattern):
     def __init__(self, path="/mnt/ms/old/rawdata/"):

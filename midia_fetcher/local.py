@@ -3,11 +3,13 @@ from pathlib import Path
 from glob import glob
 
 from midia_fetcher.datasource import DataSource
-from midia_fetcher.paths import PlainPath
+from midia_fetcher.paths import PlainPath, PathPattern, GlobPath
 
 
 class DiskSource(DataSource):
     def __init__(self, path_pattern):
+        if not isinstance(path_pattern, PathPattern):
+            pattern = GlobPath(path_pattern)
         self.pattern = path_pattern
 
     def _path_fetch(self, src_path, dst_path):
