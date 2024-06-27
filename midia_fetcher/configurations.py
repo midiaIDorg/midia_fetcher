@@ -1,14 +1,16 @@
 import socket
-
 from pathlib import Path
+
+from midia_fetcher.aws import AwsSource
+from midia_fetcher.datasource import Chain
+from midia_fetcher.local import Cache, DiskSource
 from midia_fetcher.paths import MainzPaths
 from midia_fetcher.ssh import SshSource
-from midia_fetcher.aws import AwsSource
-from midia_fetcher.local import Cache, DiskSource
-from midia_fetcher.datasource import Chain
+
 
 def default_aws_source():
-    return AwsSource(prefixes = ["data/reference_datasets", "data/reference_data"])
+    return AwsSource(prefixes=["data/reference_datasets", "data/reference_data"])
+
 
 def get_configuration(name=None):
     if name is None:
@@ -37,7 +39,7 @@ def get_configuration(name=None):
         remote = DiskSource(MainzPaths())
         return Cache(remote, "/home/_common_/midia_cached_data")
     elif name == "pingu":
-        ssh = SshSource("midia", MainzPaths())
+        ssh = SshSource("tiger", MainzPaths())
         aws = default_aws_source()
         remote = Chain([ssh, aws])
         return Cache(remote, "/home/matteo/msdata")
