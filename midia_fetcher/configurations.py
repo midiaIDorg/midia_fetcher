@@ -40,7 +40,7 @@ def get_configuration(name=None):
         return Cache(remote, "/home/_common_/midia_cached_data")
     elif name == "oldjugular":
         remote = DiskSource(MainzPaths())
-        return Cache(remote, "/home/_common_/midia_cached_data")
+        return Cache(remote, "/shared/midia_cached_data")
     elif name == "pingu":
         ssh = SshSource("tiger", MainzPaths())
         aws = default_aws_source()
@@ -50,11 +50,11 @@ def get_configuration(name=None):
         aws = Cache(default_aws_source(), "~/aws_cache")
         local = DiskSource("~/data")
         return Chain([local, aws])
-    '''
+    """
     else:
         aws = default_aws_source()
         cache_folder = Path.home() / "msdata"
         cache_folder.mkdir(parents=False, exist_ok=True)
         return Cache(aws, str(cache_folder))
     raise NotImplementedError()
-    '''
+    """
