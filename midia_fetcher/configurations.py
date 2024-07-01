@@ -38,6 +38,9 @@ def get_configuration(name=None):
     elif name == "midiaor":
         remote = DiskSource(MainzPaths())
         return Cache(remote, "/home/_common_/midia_cached_data")
+    elif name == "oldjugular":
+        remote = DiskSource(MainzPaths())
+        return Cache(remote, "/home/_common_/midia_cached_data")
     elif name == "pingu":
         ssh = SshSource("tiger", MainzPaths())
         aws = default_aws_source()
