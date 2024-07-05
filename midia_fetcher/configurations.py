@@ -38,7 +38,7 @@ def get_configuration(name=None):
     elif name == "midiaor":
         remote = DiskSource(MainzPaths())
         return Cache(remote, "/home/_common_/midia_cached_data")
-    elif name == "oldjugular":
+    elif name in ("oldjugular", "jagular"):
         remote = DiskSource(MainzPaths())
         return Cache(remote, "/shared/midia_cached_data")
     elif name == "pingu":
