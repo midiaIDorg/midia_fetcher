@@ -48,7 +48,7 @@ class Cache(DataSource):
         if path is None:
             path = self._default_locations()
         path = Path(path)
-        assert path.is_dir()
+        assert path.is_dir(), f"Path {path} doesn't seem to exist (or isn't a dir)"
 
         self.path = path
         self.back_source = back_source

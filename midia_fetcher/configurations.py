@@ -21,9 +21,9 @@ def get_configuration(name=None):
         aws = default_aws_source()
         remote = Chain([ssh, aws])
         return Cache(remote, "/mnt/storage/science/midia_rawdata")
-    elif name == "spot":
+    elif name in ["spot", "DESKTOP-2T68Q8K"]:
         remote = SshSource("tuntiger", MainzPaths())
-        return remote
+        return Cache(remote, Path("~/midia_rawdata").expanduser())
     elif name == "nighthaven":
         remote = SshSource("tuntiger", MainzPaths())
         return Cache(remote, "/mnt/storage/midia/rawdata")
@@ -47,8 +47,8 @@ def get_configuration(name=None):
         remote = Chain([ssh, aws])
         return Cache(remote, "/home/matteo/msdata")
     else:
-        aws = Cache(default_aws_source(), "~/aws_cache")
-        local = DiskSource("~/data")
+        aws = Cache(default_aws_source(), Path("~/aws_cache").expanduser())
+        local = DiskSource(Path("~/data").expanduser())
         return Chain([local, aws])
     """
     else:
