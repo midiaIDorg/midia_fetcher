@@ -9,8 +9,9 @@ from midia_fetcher.paths import PlainPath, PathPattern, GlobPath
 class DiskSource(DataSource):
     def __init__(self, path_pattern):
         if not isinstance(path_pattern, PathPattern):
-            pattern = GlobPath(path_pattern)
-        self.pattern = path_pattern
+            self.pattern = GlobPath(path_pattern)
+        else:
+            self.pattern = path_pattern
 
     def _path_fetch(self, src_path, dst_path):
         command = [
@@ -72,7 +73,7 @@ class Cache(DataSource):
         assert len(paths) == 1
         return paths[0]
 
-    def fetch(self, instrument, dataset, path, overwrite=False):
+    def fetch(self, instrument, dataset, dst_path, overwrite=False):
         path_in_cache = self._cache_path(instrument, dataset)
         finished_tag = path_in_cache.with_suffix(".finished")
         if not finished_tag.exists():
@@ -86,4 +87,4 @@ class Cache(DataSource):
                 return False
             finished_tag.touch()
         print("Copying from cache")
-        return self.disk_source.fetch(instrument, dataset, path, overwrite=overwrite)
+        return self.disk_source.fetch(instrument, dataset, dst_path, overwrite=overwrite)

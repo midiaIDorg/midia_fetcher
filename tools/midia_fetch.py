@@ -36,6 +36,6 @@ fetcher = get_configuration(args.config)
 fetcher.fetch(
     instrument=args.instrument_tag,
     dataset=args.dataset,
-    path=args.output,
+    dst_path=args.output,
     overwrite=args.force,
 )
