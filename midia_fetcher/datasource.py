@@ -26,6 +26,7 @@ class Chain(DataSource):
         self.sources = sources
 
     def fetch(self, instrument, dataset, dst_path, overwrite=False):
+        last_exc = None
         for source in self.sources:
             try:
                 if source.fetch(
@@ -37,4 +38,6 @@ class Chain(DataSource):
                     return True
             except Exception as e:
                 print(str(e))
+                last_exc = e
+        raise last_exc
         return False
