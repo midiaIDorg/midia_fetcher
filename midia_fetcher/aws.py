@@ -46,7 +46,10 @@ class AwsSource(DataSource):
         try:
             for obj in self.bucket.objects.all():
                 key = obj.key
-                path_n, file_n = key.rsplit("/", 1)
+                try:
+                    path_n, file_n = key.rsplit("/", 1)
+                except ValueError:
+                    continue
                 if not self.matches_prefixes(path_n):
                     continue
                 if file_n == "analysis.tdf":
