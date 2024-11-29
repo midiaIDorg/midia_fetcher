@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools >= 64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name="midia_fetcher"
+version="0.0.2"
+description="Framework for fetching of MIDIA data."
+readme="README.md"
+authors=[
+    {name="Michał Piotr Startek",email="michalsta@mimuw.edu.pl"},
+    {name="Mateusz Krzysztof Łącki",email="matteo.lacki@gmail.com"},
+]
+dependencies = [
+    "toml",
+    "boto3",
+]
+
+[project.scripts]
+midia_fetch = "midia_fetcher.tools.midia_fetch:main"
+
+[project.urls]
+homepage="https://github.com/midiaIDorg/midia_fetcher"
+repository="https://github.com/midiaIDorg/midia_fetcher"
+
+[tool.uv]
+reinstall-package = ["midia_fetcher"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
