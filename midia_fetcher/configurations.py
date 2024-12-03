@@ -9,7 +9,8 @@ from midia_fetcher.ssh import SshSource
 
 
 def default_aws_source():
-    return AwsSource(prefixes=["data/reference_datasets", "data/reference_data"])
+    #return AwsSource(prefixes=["data/reference_datasets", "data/reference_data"])
+    return AwsSource(prefixes=["data/reference_datasets",])
 
 
 def get_configuration(name=None):
