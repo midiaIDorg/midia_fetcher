@@ -1,8 +1,12 @@
-from midia_fetcher.datasource import DataSource
-
+import typing
+from collections import defaultdict
+from functools import cache
 from pathlib import Path
+
 import boto3
 import botocore.exceptions
+
+from midia_fetcher.datasource import DataSource
 
 
 class AwsSource(DataSource):
@@ -32,8 +36,29 @@ class AwsSource(DataSource):
         return False
 
     def ls(self):
+        for path in self:
+            print(path)
+
+    def __iter__(self):
         for obj in self.bucket.objects.all():
-            print(obj.key)
+            yield obj.key
+
+    def iter_datasets(self, suffix: str = ".d") -> typing.Iterable[Path]:
+        for path in self:
+            path = Path(path)
+            if path.suffix == suffix:
+                yield path
+
+    @cache
+    def get_short_datasets_to_their_occurences(
+        self, **kwargs
+    ) -> defaultdict[str, list[str]]:
+        short_name_to_paths = defaultdict(list)
+        for folder_path in self.iter_datasets(**kwargs):
+            dataset = folder_path.stem
+            short_name = f'{dataset[0]}{dataset.rsplit("_",1)[1]}'
+            short_name_to_paths[short_name].append(str(folder_path))
+        return short_name_to_paths
 
     def fetch(self, instrument, dataset, dst_path, overwrite=False):
         print(
@@ -44,8 +69,7 @@ class AwsSource(DataSource):
         paths = set()
         expected_suffix = f"_{dataset}.d"
         try:
-            for obj in self.bucket.objects.all():
-                key = obj.key
+            for key in self:
                 try:
                     path_n, file_n = key.rsplit("/", 1)
                 except ValueError:
@@ -69,8 +93,7 @@ class AwsSource(DataSource):
 
             print("Found in AWS, fetching...")
 
-            for obj in self.bucket.objects.all():
-                key = obj.key
+            for key in self:
                 if key.startswith(path):
                     filename = key[len(path) + 1 :]
                     target_file = dst_path / filename
@@ -80,12 +103,17 @@ class AwsSource(DataSource):
 
             return True
         except botocore.exceptions.NoCredentialsError as e:
-            raise RuntimeError(f"Failed due to botocore.exceptions.NoCredentialsError: {e}") from e
-
+            raise RuntimeError(
+                f"Failed due to botocore.exceptions.NoCredentialsError: {e}"
+            ) from e
 
 
 if __name__ == "__main__":
-
-    A = AwsSource(prefixes = ["data/reference_datasets/Phosphoproteome set", "data/reference_data/shortgradient_highload"])
+    A = AwsSource(
+        prefixes=[
+            "data/reference_datasets/Phosphoproteome set",
+            "data/reference_data/shortgradient_highload",
+        ]
+    )
     A.ls()
-    #A.fetch("G", 1234, "gtest", overwrite=True)
+    # A.fetch("G", 1234, "gtest", overwrite=True)
