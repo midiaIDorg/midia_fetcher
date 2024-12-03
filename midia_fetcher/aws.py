@@ -49,6 +49,7 @@ class AwsSource(DataSource):
             if self.matches_prefixes(path):
                 path = Path(path)
                 if path.name == "analysis.tdf":
+                    assert path.parent.name.endswith(suffix)
                     yield path.parent
 
     @cache
