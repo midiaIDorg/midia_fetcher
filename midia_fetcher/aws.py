@@ -48,8 +48,8 @@ class AwsSource(DataSource):
         for path in self:
             if self.matches_prefixes(path):
                 path = Path(path)
-                if suffix is None or path.suffix == suffix:
-                    yield path
+                if path.name == "analysis.tdf":
+                    yield path.parent
 
     @cache
     def get_short_datasets_to_their_occurences(
