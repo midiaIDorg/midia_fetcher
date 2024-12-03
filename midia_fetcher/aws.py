@@ -41,13 +41,15 @@ class AwsSource(DataSource):
 
     def __iter__(self):
         for obj in self.bucket.objects.all():
-            yield obj.key
+            path = obj.key
+            yield path
 
-    def iter_datasets(self, suffix: str = ".d") -> typing.Iterable[Path]:
+    def iter_datasets(self, suffix: str | None = ".d") -> typing.Iterable[Path]:
         for path in self:
-            path = Path(path)
-            if path.suffix == suffix:
-                yield path
+            if self.matches_prefixes(path):
+                path = Path(path)
+                if suffix is None or path.suffix == suffix:
+                    yield path
 
     @cache
     def get_short_datasets_to_their_occurences(
