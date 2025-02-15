@@ -1,5 +1,6 @@
 import socket
 from pathlib import Path
+import os
 
 from midia_fetcher.aws import AwsSource
 from midia_fetcher.datasource import Chain
@@ -14,6 +15,18 @@ def default_aws_source():
 
 
 def get_configuration(name=None):
+    if os.environ.get("MIDIA_FETCHER_CONFIG") is not None:
+        cfg_path = Path(os.environ.get("MIDIA_FETCHER_CONFIG")).expanduser()
+        if not cfg_path.exists():
+            raise FileNotFoundError(f"Configuration file {cfg_path} does not exist. Either create it or unset the MIDIA_FETCHER_CONFIG environment variable.")
+        with open(cfg_path, "r") as f:
+            cfg = "global fetcher\n" + f.read()
+            exec(cfg)
+            try:
+                return fetcher
+            except NameError:
+                raise NameError("The configuration file must define a variable named \"fetcher\".")
+
     if name is None:
         name = socket.gethostname()
 
