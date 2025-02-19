@@ -100,6 +100,8 @@ class AwsSource(DataSource):
                 if key.startswith(path):
                     filename = key[len(path) + 1 :]
                     target_file = dst_path / filename
+                    if len(filename) == 0:
+                        continue
                     target_file.parent.mkdir(parents=True, exist_ok=True)
                     print(key, dst_path, target_file)
                     self.bucket.download_file(key, str(target_file))
