@@ -1,4 +1,5 @@
 import shutil
+
 from abc import ABC
 from pathlib import Path
 
@@ -39,5 +40,8 @@ class Chain(DataSource):
             except Exception as e:
                 print(str(e))
                 last_exc = e
+        last_exc.add_note(
+            "In general, how are we supposed to know where to fetch data?\nPut your data in folder `spectra` or specify rules for getting the data in `configs/fetcher/default.py`."
+        )
         raise last_exc
         return False
