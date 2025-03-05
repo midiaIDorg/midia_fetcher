@@ -8,6 +8,7 @@ from midia_fetcher.datasource import Chain
 from midia_fetcher.local import Cache
 from midia_fetcher.local import DiskSource
 from midia_fetcher.paths import MainzPaths
+from midia_fetcher.paths import NewMainzPaths
 from midia_fetcher.ssh import SshSource
 
 

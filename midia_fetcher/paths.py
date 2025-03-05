@@ -18,6 +18,7 @@ class PlainPath(PathPattern):
     def get_paths(self, instrument_tag, dataset):
         return [self.base_dir / f"{instrument_tag}_{dataset}.d"]
 
+
 class GlobPath(PathPattern):
     def __init__(self, base_dir):
         super().__init__()
@@ -25,6 +26,7 @@ class GlobPath(PathPattern):
 
     def get_paths(self, instrument_tag, dataset):
         return [self.base_dir / f"{instrument_tag}*_{dataset}.d"]
+
 
 class MainzPaths(PathPattern):
     def __init__(self, path="/mnt/ms/old/rawdata/"):
@@ -58,5 +60,30 @@ class MainzPaths(PathPattern):
                 ]
             )
 
+        print(glob_patterns)
+        return glob_patterns
+
+
+class NewMainzPaths(PathPattern):
+    def __init__(self, path="/mnt/ms/new/RAW/"):
+        super().__init__()
+        self.path = Path(path)
+
+    def get_paths(self, instrument_tag, dataset):
+        instrument_name = {
+            "B": "bruker",
+            "F": "falbala",
+            "G": "gutamine",
+            "O": "obelix",
+        }[instrument_tag]
+        if instrument_tag == "B":
+            print(
+                "No specific location for Bruker acquired data on the new server. TODO: make it."
+            )
+            return []
+
+        glob_patterns = [
+            self.path / f"{instrument_name}_raw/RAW/*/{instrument_tag}*_{dataset}.d"
+        ]
         print(glob_patterns)
         return glob_patterns
