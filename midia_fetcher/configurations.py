@@ -21,6 +21,21 @@ def default_aws_source():
     )
 
 
+def set_aws_entry(entry, location):
+    from subprocess import run
+    from pathlib import Path
+    import os
+
+    location = Path(location)
+    os.environ[entry] = str(location)
+
+    if not location.exists():
+        location.parent.mkdir(exist_ok=True, parents=True)
+        print("Running `aws configure`.")
+        run(["aws", "configure"], check=True)
+    print(f"USING `{location}` AS `{entry}`.")
+
+
 def get_configuration(name=None):
     if os.environ.get("MIDIA_FETCHER_CONFIG") is not None:
         print(
@@ -90,7 +105,7 @@ def get_configuration(name=None):
             fetcher = Chain([local, aws])
         case "midia_docker":
             set_aws_entry("AWS_CONFIG_FILE", "configs/aws/config")
-            set_aws_entry("AWS_CREDENTIALS_FILE", "configs/aws/credentials")
+            set_aws_entry("AWS_SHARED_CREDENTIALS_FILE", "configs/aws/credentials")
             fetcher = AwsSource(prefixes=["data/reference_datasets"])
         case other:  # like default
             raise NotImplementedError(
